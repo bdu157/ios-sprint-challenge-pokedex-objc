@@ -10,6 +10,9 @@
 #import "DWPPokemon.h"
 #import "Pokedex_Hybrid_Objc_Swift-Swift.h"
 
+//c pointer
+void *KVOContext = &KVOContext;
+
 @interface DetailViewController ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *pokedexImageView;
@@ -24,11 +27,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self updateViews];
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self updateViews];
     
     [DWPokemonAPI.sharedController fillInDetailsFor:self.pokemon];
 }
@@ -38,11 +40,13 @@
 -(void)updateViews
 {
     if (self.pokemon) {
-        self.nameLabel.text = self.pokemon.name;
-        self.idLabel.text = self.pokemon.identifier;
-        //self.abilitiesTextView.text = self.pokemon.abilities;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.nameLabel.text = self.pokemon.name;
+            self.idLabel.text = [self.pokemon.identifier stringValue];
+            //self.abilitiesTextView.text = self.pokemon.abilities;
+        });
         
-        //give a conditional that you only fetch if there is image string from calling fillinperson method
+        //give a conditional that you only fetch if there is image string from calling fillinDetails method
         if (self.pokemon.sprite) {
             [DWPokemonAPI.sharedController fetchSprite:self.pokemon.sprite completionHandler:^(UIImage *image, NSError *error) {
                 if (error) {
@@ -65,7 +69,9 @@
         
         NSLog(@"setting a pokemon being triggers");
         
-        //       [_user removeObserver:self forKeyPath:@"email" context:KVOContext];
+        [_pokemon removeObserver:self forKeyPath:@"identifier" context:KVOContext];
+        [_pokemon removeObserver:self forKeyPath:@"abilities" context:KVOContext];
+        [_pokemon removeObserver:self forKeyPath:@"sprite" context:KVOContext];
         
         NSLog(@"setting old pokemon: %@ new pokemon: %@", _pokemon, pokemon);
         //old pokemon = Null
@@ -73,8 +79,20 @@
         
         NSLog(@"setting old pokemon: %@ new pokemon: %@", _pokemon, pokemon);
         
-        //       [_user addObserver:self forKeyPath:@"email" options:NSKeyValueObservingOptionInitial context:KVOContext];
+        [_pokemon addObserver:self forKeyPath:@"identifier" options:NSKeyValueObservingOptionInitial context:KVOContext];
+        [_pokemon addObserver:self forKeyPath:@"abilities" options:NSKeyValueObservingOptionInitial context:KVOContext];
+        [_pokemon addObserver:self forKeyPath:@"sprite" options:NSKeyValueObservingOptionInitial context:KVOContext];
+        
         [self updateViews];
+    }
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if (context == KVOContext) {
+        [self updateViews];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
 
