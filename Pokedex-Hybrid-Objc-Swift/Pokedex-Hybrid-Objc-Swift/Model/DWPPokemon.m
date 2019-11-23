@@ -10,7 +10,7 @@
 
 @implementation DWPPokemon
 
-- (instancetype)initWithName:(NSString *)name identifier:(NSString *)identifier abilities:(NSArray *)abilities sprite:(NSString *)sprite
+- (instancetype)initWithName:(NSString *)name identifier:(NSNumber *)identifier abilities:(NSArray *)abilities sprite:(NSString *)sprite
 {
     self = [super init];
     if (self) {

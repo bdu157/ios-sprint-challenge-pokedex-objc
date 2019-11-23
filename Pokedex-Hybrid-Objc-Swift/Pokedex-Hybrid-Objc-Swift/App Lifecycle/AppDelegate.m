@@ -23,6 +23,9 @@
             NSLog(@"error in getting users");
         }
     }];
+    
+    //[DWPokemonAPI.sharedController fillInDetailsFor:@"golem"];
+    
     return YES;
 }
 

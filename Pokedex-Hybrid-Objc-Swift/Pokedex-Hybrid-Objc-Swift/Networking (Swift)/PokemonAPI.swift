@@ -93,6 +93,61 @@ class PokemonAPI: NSObject {
     
     @objc
     func fillInDetails(for pokemon: Pokemon) {
+        let pokemonListUrl = baseUrl.appendingPathComponent("pokemon").appendingPathComponent(pokemon.name)
         
+        var request = URLRequest(url: pokemonListUrl)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) { (data, _, error) in
+            if let error = error {
+                NSLog("there is an error in getting pokemon detail: \(error)")
+                return
+            }
+            
+            guard let data = data else {
+                NSLog("there is no data")
+                return
+            }
+            
+            do {
+                
+                guard let dictionary = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any] else {
+                    let error = NSError(domain: "UserControllerErrorDomain", code: 1, userInfo: nil);
+                    throw error
+                }
+                
+                //parse id and add it to the object
+                let id = dictionary["id"] as! NSNumber
+                pokemon.identifier = id
+                print(pokemon.identifier!)
+                
+                //parse sprite and add it to the object
+                let spritesDictionary = dictionary["sprites"] as! [String : Any]
+                let sprite = spritesDictionary["front_default"] as! String
+                pokemon.sprite = sprite
+                print(pokemon.sprite!)
+                
+                //parse abilities
+                guard let abilitiesDictionary = dictionary["abilities"] as? [[String : Any]] else {
+                    let error = NSError(domain: "UserControllerErrorDomain", code: 2, userInfo: nil);
+                    throw error
+                }
+                
+                var abilities: [String] = []
+                
+                for abilityDictionary in abilitiesDictionary {
+                    let ability = abilityDictionary["ability"] as! [String : Any]
+                    let abilityName = ability["name"] as! String
+                    abilities.append(abilityName)
+                }
+                
+                pokemon.abilities = abilities
+                
+                print(pokemon.abilities!)
+                
+            } catch {
+                NSLog("there is an error in encoding data \(error)")
+            }
+        }.resume()
     }
 }
