@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "Pokedex_Hybrid_Objc_Swift-Swift.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [DWPokemonAPI.sharedController fetchAllPokemonWithCompletion:^(NSArray<DWPPokemon *> *pokemons, NSError *error) {
+        if (error) {
+            NSLog(@"error in getting users");
+        }
+    }];
     return YES;
 }
 
