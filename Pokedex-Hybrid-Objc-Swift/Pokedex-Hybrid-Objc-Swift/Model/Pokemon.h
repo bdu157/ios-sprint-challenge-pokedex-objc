@@ -1,15 +1,17 @@
 //
-//  ViewController.h
+//  Pokemon.h
 //  Pokedex-Hybrid-Objc-Swift
 //
 //  Created by Dongwoo Pae on 11/23/19.
 //  Copyright © 2019 Dongwoo Pae. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface ViewController : UIViewController
+NS_ASSUME_NONNULL_BEGIN
 
+@interface Pokemon : NSObject
 
 @end
 
+NS_ASSUME_NONNULL_END
