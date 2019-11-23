@@ -23,16 +23,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+//setter - add observer
+-(void)setPokemon:(DWPPokemon *)pokemon
+{
+    //if old user is not same as new user here then assign old user (original user) to new user and updateViews
+    if(pokemon != _pokemon) {
+        
+        NSLog(@"setting a pokemon being triggers");
+        
+ //       [_user removeObserver:self forKeyPath:@"email" context:KVOContext];
+
+        NSLog(@"setting old pokemon: %@ new pokemon: %@", _pokemon, pokemon);
+        //old pokemon = Null
+        _pokemon = pokemon;
+        
+        NSLog(@"setting old pokemon: %@ new pokemon: %@", _pokemon, pokemon);
+    
+ //       [_user addObserver:self forKeyPath:@"email" options:NSKeyValueObservingOptionInitial context:KVOContext];
+
+    }
 }
-*/
 
 @end

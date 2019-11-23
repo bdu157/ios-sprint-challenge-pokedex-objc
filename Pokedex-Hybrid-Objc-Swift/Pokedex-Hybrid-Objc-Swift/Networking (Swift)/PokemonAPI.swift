@@ -24,7 +24,13 @@ class PokemonAPI: NSObject {
     func fetchAllPokemon(completion: @escaping ([Pokemon]?, Error?) -> Void) {
         let pokemonListUrl = baseUrl.appendingPathComponent("pokemon")
         
-        var request = URLRequest(url: pokemonListUrl)
+        var urlComponents = URLComponents(url: pokemonListUrl, resolvingAgainstBaseURL: true)
+        let limitQueryItem = URLQueryItem(name: "limit", value: "964")
+        urlComponents?.queryItems = [limitQueryItem]
+        
+        guard let urlRequest = urlComponents?.url else {return}
+        
+        var request = URLRequest(url: urlRequest)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) { (data, _, error) in
