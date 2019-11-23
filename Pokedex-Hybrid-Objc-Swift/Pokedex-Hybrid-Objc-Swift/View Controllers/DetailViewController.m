@@ -43,20 +43,20 @@ void *KVOContext = &KVOContext;
         dispatch_async(dispatch_get_main_queue(), ^{
             self.nameLabel.text = self.pokemon.name;
             self.idLabel.text = [self.pokemon.identifier stringValue];
-            //self.abilitiesTextView.text = self.pokemon.abilities;
+            self.abilitiesTextView.text = [self.pokemon.abilities componentsJoinedByString:@" \n"];
         });
-        
-        //give a conditional that you only fetch if there is image string from calling fillinDetails method
-        if (self.pokemon.sprite) {
-            [DWPokemonAPI.sharedController fetchSprite:self.pokemon.sprite completionHandler:^(UIImage *image, NSError *error) {
-                if (error) {
-                    NSLog(@"Error in fetching images: %@", error);
-                }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.pokedexImageView.image = image;
-                });
-            }];
-        }
+    };
+    
+    //give a conditional that you only fetch if there is image string from calling fillinDetails method
+    if (self.pokemon.sprite) {
+        [DWPokemonAPI.sharedController fetchSprite:self.pokemon.sprite completionHandler:^(UIImage *image, NSError *error) {
+            if (error) {
+                NSLog(@"Error in fetching images: %@", error);
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.pokedexImageView.image = image;
+            });
+        }];
     }
 }
 
